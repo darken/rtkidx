@@ -16,33 +16,36 @@
     #kanjiInput {
         width: 100%;
         font-size: 24px;
-        padding: 10px;
+        padding: 12px;
         box-sizing: border-box;
-        margin-bottom: 20px;
+        margin-bottom: 18px;
     }
 
     .result {
         display: block;
-        font-size: 24px;
-        padding: 10px;
-        margin-bottom: 20px;
+        padding: 12px;
+        margin-bottom: 18px;
         border-radius: 8px;
         background-color: #f9f9f9;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         word-wrap: break-word;
     }
 
-    .result .title { font-weight: bold; }
-    .result .keyword { color: royalblue; }
+    .result .title { font-size: 24px; font-weight: bold; }
+    .result .num { font-size: 24px; font-weight: bold; color: indianred; }
+    .result .keyword { font-size: 24px; font-weight: bold; color: royalblue; }
+    .result .components { font-size: 18px; color: darkgrey; }
 
     @media screen and (max-width: 600px) {
-        #kanjiInput { font-size: 32px; padding: 12px; }
-        .result { font-size: 32px; padding: 12px; margin-bottom: 24px; }
+        .result .title { font-size: 30px;}
+        .result .num { font-size: 30px;}
+        .result .keyword { font-size: 30px;}
     }
 
     @media screen and (max-width: 900px) {
-        #kanjiInput { font-size: 30px; padding: 12px; }
-        .result { font-size: 30px; padding: 12px; margin-bottom: 22px; }
+        .result .title { font-size: 28px;}
+        .result .num { font-size: 28px;}
+        .result .keyword { font-size: 28px;}
     }
     </style>
 </head>
@@ -80,8 +83,9 @@
       const line = document.createElement("div");
       line.classList.add("result");
       line.innerHTML = `
-        <span class="title">${entry.kanji}　${entry.id}</span><br>
-        <span class="keyword">${entry.keyword}</span>「${entry.components}」
+        <span class="title">${entry.kanji}</span>　<span class="num">${entry.id.toString().padStart(4, "0")}</span>　<span class="keyword">${entry.keyword}</span>
+        <br>
+        <span class="components">${entry.components}</span>
       `;
       container.appendChild(line);
     });
