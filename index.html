@@ -4,12 +4,36 @@
   <meta charset="UTF-8">
   <title>Kanji Lookup</title>
   <style>
-    #kanjiOutput div {
-      margin-bottom: 4px;
-    }
-    .kanji { font-weight: bold; }
-    .meaning { color: green; }
-    .reading { font-style: italic; }
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+
+  /* Make the textbox big and full width */
+  #kanjiInput {
+    width: 100%;       /* Full width of the container/screen */
+    font-size: 24px;   /* Bigger text */
+    padding: 10px;     /* Some padding inside the box */
+    box-sizing: border-box; /* Ensure padding doesn't break width */
+    margin-bottom: 20px;
+  }
+
+  #kanjiOutput div {
+    margin-bottom: 6px;
+    font-size: 50px;
+  }
+
+  .title { font-weight: bold; }
+  .keyword { color: royalblue; }
+
+  results {
+    display: block;
+    width: 100%;       /* Full width of the container/screen */
+    font-size: 24px;   /* Bigger text */
+    padding: 10px;     /* Some padding inside the box */
+    box-sizing: border-box; /* Ensure padding doesn't break width */
+    margin-bottom: 20px;
+  }
   </style>
 </head>
 <body>
@@ -40,11 +64,11 @@
 
   function displayKanjiResults(results, divId) {
     const container = document.getElementById(divId);
-    container.innerHTML = ""; // Clear previous content
+    container.innerHTML = "";
 
     results.forEach((entry) => {
       const line = document.createElement("results");
-      line.textContent = `${entry.id} ${entry.kanji}: ${entry.keyword} / ${entry.components} / ${entry.on_reading} / ${entry.kun_reading}`;
+      line.textContent = `<span class="title">${entry.kanji} #${entry.id}</span>\n<span class="keyword">${entry.keyword}</span>「${entry.components}」`;
       container.appendChild(line);
     });
   }
