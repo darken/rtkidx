@@ -1,67 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Kanji Lookup</title>
-  <style>
-  body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    margin: 0;
-  }
+    <meta charset="UTF-8">
+    <title>RTK index</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        margin: 0;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
 
-  /* Make the textbox big and full width */
-  #kanjiInput {
-    width: 100%;
-    font-size: 24px;
-    padding: 10px;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-  }
-
-  /* Each result entry */
-  .result {
-    display: block;
-    width: 100%;
-    font-size: 24px;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  }
-
-  .result .title { font-weight: bold; }
-  .result .keyword { color: royalblue; }
-
-  /* Mobile phones (max width 600px) */
-  @media screen and (max-width: 600px) {
     #kanjiInput {
-      font-size: 20px;
-      padding: 8px;
+        width: 100%;
+        font-size: 24px;
+        padding: 10px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
     }
 
     .result {
-      font-size: 18px;
-      padding: 8px;
-      margin-bottom: 15px;
-    }
-  }
-
-  /* Tablets (max width 900px) */
-  @media screen and (max-width: 900px) {
-    #kanjiInput {
-      font-size: 22px;
-      padding: 9px;
+        display: block;
+        width: 100%;
+        font-size: 24px;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        word-wrap: break-word;
     }
 
-    .result {
-      font-size: 20px;
-      padding: 9px;
-      margin-bottom: 18px;
+    .result .title { font-weight: bold; }
+    .result .keyword { color: royalblue; }
+
+    @media screen and (max-width: 600px) {
+        #kanjiInput { font-size: 20px; padding: 8px; }
+        .result { font-size: 18px; padding: 8px; margin-bottom: 15px; }
     }
-  }
-  </style>
+
+    @media screen and (max-width: 900px) {
+        #kanjiInput { font-size: 22px; padding: 9px; }
+        .result { font-size: 20px; padding: 9px; margin-bottom: 18px; }
+    }
+    </style>
 </head>
 <body>
   <input type="text" id="kanjiInput" placeholder="Type kanji here" />
