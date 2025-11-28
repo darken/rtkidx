@@ -13,12 +13,43 @@
         box-sizing: border-box;
     }
 
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 18px;
+    }
+
     #kanjiInput {
         width: 100%;
         font-size: 24px;
-        padding: 12px;
+        padding: 12px 50px 12px 12px;
         box-sizing: border-box;
-        margin-bottom: 18px;
+    }
+
+    .clear-btn {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background-color: #ccc;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .clear-btn svg {
+      display: block;
+    }
+
+    .clear-btn:active {
+      background-color: #bbb;
     }
 
     .result {
@@ -37,20 +68,37 @@
     .result .components { font-size: 18px; color: darkgrey; }
 
     @media screen and (max-width: 600px) {
-        .result .title { font-size: 30px;}
-        .result .num { font-size: 30px;}
-        .result .keyword { font-size: 30px;}
+      #kanjiInput {
+        padding: 8px 45px 8px 8px;
+      }
+
+      .clear-btn {
+        width: 28px;
+        height: 28px;
+      }
+
+      .result .title { font-size: 30px;}
+      .result .num { font-size: 30px;}
+      .result .keyword { font-size: 30px;}
     }
 
     @media screen and (max-width: 900px) {
-        .result .title { font-size: 28px;}
-        .result .num { font-size: 28px;}
-        .result .keyword { font-size: 28px;}
+      .result .title { font-size: 28px;}
+      .result .num { font-size: 28px;}
+      .result .keyword { font-size: 28px;}
     }
     </style>
 </head>
 <body>
-  <input type="text" id="kanjiInput" placeholder="Type kanji here" />
+  <div class="input-wrapper">
+    <input type="text" id="kanjiInput" placeholder="Type kanji here" />
+    <button class="clear-btn" id="clearBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24">
+        <line x1="5" y1="5" x2="19" y2="19" stroke="white" stroke-width="3" stroke-linecap="round"/>
+        <line x1="19" y1="5" x2="5" y2="19" stroke="white" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
   <div id="kanjiOutput"></div>
 
   <script>
@@ -67,8 +115,6 @@
     for (const char of str) {
       if (index[char]) {
         result.push({ kanji: char, ...index[char] });
-      } else {
-        result.push(null);
       }
     }
 
@@ -91,12 +137,26 @@
     });
   }
 
-  // Add event listener to the input box
   const inputBox = document.getElementById('kanjiInput');
+  const clearBtn = document.getElementById("clearBtn");
+
   inputBox.addEventListener('input', (event) => {
     const text = event.target.value;
     const lookupResult = lookupKanjiString(text);
     displayKanjiResults(lookupResult, 'kanjiOutput');
+  });
+
+  inputBox.addEventListener('keydown', (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      inputBox.blur();
+    }
+  });
+
+  clearBtn.addEventListener("click", () => {
+    inputBox.value = "";
+    document.getElementById("kanjiOutput").innerHTML = "";
+    inputBox.focus();
   });
   </script>
 </body>
