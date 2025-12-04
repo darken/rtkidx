@@ -33,8 +33,10 @@
       transform: translateY(-50%);
       width: 32px;
       height: 32px;
+      border-radius: 50%;
       border: none;
       background-color: unset;
+      color: #000;
       font-size: 24px;
       cursor: pointer;
       display: flex;
@@ -53,7 +55,36 @@
 
     .clear-btn svg {
       display: block;
-      fill: #000;
+    }
+
+    .paste-btn {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background-color: unset;
+      color: #000;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      pointer-events: auto;
+      transition: opacity 0.15s ease;
+    }
+
+    .paste-btn.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .paste-btn svg {
+      display: block;
     }
 
     .result {
@@ -96,8 +127,13 @@
 <body>
   <div class="input-wrapper">
     <input type="text" id="kanjiInput" placeholder="Type kanji here" />
+    <button class="paste-btn" id="pasteBtn">
+      <svg focusable="false xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+      </svg>
+    </button>
     <button class="clear-btn" id="clearBtn">
-      <svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
       </svg>
     </button>
@@ -142,17 +178,30 @@
 
   const inputBox = document.getElementById('kanjiInput');
   const clearBtn = document.getElementById("clearBtn");
+  const pasteBtn = document.getElementById("pasteBtn");
+
+  function updateButtonVisibility(textInput) {
+    const text = textInput || inputBox.value;
+    if (text.length > 0) {
+      clearBtn.classList.add('visible');
+      pasteBtn.classList.add('hidden');
+    } else {
+      clearBtn.classList.remove('visible');
+      pasteBtn.classList.remove('hidden');
+    }
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      updateButtonVisibility();
+    }
+  });
 
   inputBox.addEventListener('input', (event) => {
     const text = event.target.value;
     const lookupResult = lookupKanjiString(text);
     displayKanjiResults(lookupResult, 'kanjiOutput');
-
-    if (text.length > 0) {
-      clearBtn.classList.add('visible');
-    } else {
-      clearBtn.classList.remove('visible');
-    }
+    updateButtonVisibility(text);
   });
 
   inputBox.addEventListener('keydown', (event) => {
@@ -165,9 +214,21 @@
   clearBtn.addEventListener("click", () => {
     inputBox.value = "";
     displayKanjiResults([], 'kanjiOutput');
-    clearBtn.classList.remove('visible');
+    updateButtonVisibility("");
     inputBox.focus();
   });
+
+  pasteBtn.addEventListener("click", async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      inputBox.value = text;
+      inputBox.dispatchEvent(new Event("input")); // trigger lookup
+    } catch (err) {
+      alert("Clipboard permissions are required to paste.");
+    }
+  });
+
+  window.addEventListener("DOMContentLoaded", updateButtonVisibility);
   </script>
 </body>
 </html>
