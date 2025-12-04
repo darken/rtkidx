@@ -74,9 +74,8 @@ pasteBtn.addEventListener("click", async () => {
   try {
     const text = await navigator.clipboard.readText();
     inputBox.value = text;
-    inputBox.dispatchEvent(new Event("input")); // trigger lookup
+    inputBox.dispatchEvent(new Event("input"));
   } catch (err) {
-    alert("Clipboard permissions are required to paste.");
   }
 });
 
