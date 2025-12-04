@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    margin: 0;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+#kanjiInput {
+    width: 100%;
+    font-size: 24px;
+    padding: 12px 50px 12px 12px;
+    box-sizing: border-box;
+}
+
+.clear-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: unset;
+  color: #000;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.clear-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.clear-btn svg {
+  display: block;
+}
+
+.paste-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: unset;
+  color: #000;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  pointer-events: auto;
+}
+
+.paste-btn.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.paste-btn svg {
+  display: block;
+}
+
+.result {
+    display: block;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    word-wrap: break-word;
+}
+
+.result .title { font-size: 24px; font-weight: bold; }
+.result .num { font-size: 24px; font-weight: bold; color: indianred; }
+.result .keyword { font-size: 24px; font-weight: bold; color: royalblue; }
+.result .components { font-size: 18px; color: darkgrey; }
+
+@media screen and (max-width: 600px) {
+  #kanjiInput {
+    padding: 8px 45px 8px 8px;
+  }
+
+  .clear-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .result .title { font-size: 30px;}
+  .result .num { font-size: 30px;}
+  .result .keyword { font-size: 30px;}
+}
+
+@media screen and (max-width: 900px) {
+  .result .title { font-size: 28px;}
+  .result .num { font-size: 28px;}
+  .result .keyword { font-size: 28px;}
+}
