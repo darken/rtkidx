@@ -88,7 +88,7 @@ body {
     word-wrap: break-word;
 }
 
-.result .title { font-size: 24px; font-weight: bold; }
+.result .title { font-size: 24px; font-weight: bold; color: inherit; text-decoration: none; }
 .result .num { font-size: 24px; font-weight: bold; color: indianred; }
 .result .keyword { font-size: 24px; font-weight: bold; color: royalblue; }
 .result .components { font-size: 18px; color: darkgrey; }
