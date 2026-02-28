@@ -24,7 +24,7 @@ function displayKanjiResults(results, divId) {
     const line = document.createElement("div");
     line.classList.add("result");
     line.innerHTML = `
-        <a class="title" href='https://jisho.org/search/${entry.kanji}%20%23kanji'>${entry.kanji}</a>　<span class="num">${entry.id.toString().padStart(4, "0")}</span>　<span class="keyword">${entry.keyword}</span>
+        <a class='title' target='_blank' href='https://jisho.org/search/${entry.kanji}%20%23kanji'>${entry.kanji}</a>　<span class="num">${entry.id.toString().padStart(4, "0")}</span>　<span class="keyword">${entry.keyword}</span>
         <br>
         <span class="components">${entry.components}</span>
       `;
