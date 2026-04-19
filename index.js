@@ -22,9 +22,14 @@ function displayKanjiResults(results, divId) {
     const line = document.createElement("div");
     line.classList.add("result");
     line.innerHTML = `
-        <a class='title' target='_blank' href='https://jisho.org/search/${entry.kanji}%20%23kanji'>${entry.kanji}</a>　<span class="num">${entry.id.toString().padStart(4, "0")}</span>　<span class="keyword">${entry.keyword}</span>
-        <br>
-        <span class="components">${entry.components}</span>
+        <div class='row'>
+          <a class='title' target='_blank' href='https://jisho.org/search/${entry.kanji}%20%23kanji'>${entry.kanji}</a>
+          <div class='column'>
+            <span class="num">${entry.id.toString().padStart(4, "0")}</span>
+            <a class='keyword' target='_blank' href='https://wordnik.com/words/${entry.keyword}'>${entry.keyword}</a>
+          </div>
+        </div>
+        <div class="components">${entry.components}</div>
       `;
     container.appendChild(line);
   });
