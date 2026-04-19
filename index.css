@@ -86,7 +86,7 @@ body {
 
 .result {
     display: block;
-    flex: 0 0 12em;
+    flex: 0 0 9em;
     padding: 12px;
     margin-bottom: 18px;
     border-radius: 8px;
@@ -118,5 +118,15 @@ body {
   .clear-btn {
     width: 28px;
     height: 28px;
+  }
+
+  .result {
+      flex: 0 0 9em;
+  }
+}
+
+@media screen and (max-width: 387px) {
+  .result {
+      flex: 0 0 auto;
   }
 }
