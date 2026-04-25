@@ -1,6 +1,7 @@
 const inputBox = document.getElementById("kanjiInput");
 const clearBtn = document.getElementById("clearBtn");
 const pasteBtn = document.getElementById("pasteBtn");
+updateResultsFromUrl();
 
 function lookupKanjiString(str) {
   const result = [];
@@ -46,17 +47,34 @@ function updateButtonVisibility(textInput) {
   }
 }
 
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) {
-    updateButtonVisibility();
+function updateResultsFromUrl() {
+  inputBox.value = new URLSearchParams(window.location.search).get("t") || '';
+  updateResults(inputBox.value);
+}
+
+function updateResults(text, updateUrl) {
+  const lookupResult = lookupKanjiString(text);
+  displayKanjiResults(lookupResult, "kanjiOutput");
+  updateButtonVisibility(text);
+
+  if (!updateUrl) return;
+
+  const url = new URL(window.location);
+  if (text != null && text.trim() !== "") {
+    url.searchParams.set("t", text);
+  } else {
+    url.searchParams.delete("t");
   }
+  window.history.pushState({}, "", url);
+}
+
+window.addEventListener("popstate", (event) => {
+  updateResultsFromUrl();
 });
 
 inputBox.addEventListener("input", (event) => {
   const text = event.target.value;
-  const lookupResult = lookupKanjiString(text);
-  displayKanjiResults(lookupResult, "kanjiOutput");
-  updateButtonVisibility(text);
+  updateResults(text, true);
 });
 
 inputBox.addEventListener("keydown", (event) => {
