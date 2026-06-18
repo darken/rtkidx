@@ -24,6 +24,9 @@
 		<div class="column">
 			<div class="row">
 				<span class="num">{entry.id.toString().padStart(4, '0')}</span>
+				{#if visibleField !== -1}
+					<input type="checkbox" bind:checked={showAll} />
+				{/if}
 			</div>
 			{#if visibleField !== 0 || showAll}
 				<a class="keyword" target="_blank" href="https://wordnik.com/words/{entry.keyword}"
@@ -31,9 +34,6 @@
 				>
 			{/if}
 		</div>
-		{#if visibleField !== -1}
-			<input type="checkbox" bind:checked={showAll} />
-		{/if}
 	</div>
 	{#if visibleField !== 0 || showAll}
 		<div class="components">{entry.components}</div>
