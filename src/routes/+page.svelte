@@ -13,6 +13,22 @@
 
 	const entries = Object.entries(kanji);
 
+	function blurOnEnter(node: any) {
+		const handleKeydown = (event: any) => {
+			if (event.key === 'Enter' && !event.isComposing && event.keyCode !== 229) {
+				node.blur();
+			}
+		};
+
+		node.addEventListener('keydown', handleKeydown);
+
+		return {
+			destroy() {
+				node.removeEventListener('keydown', handleKeydown);
+			}
+		};
+	}
+
 	function normalize(text: string) {
 		return text.toLowerCase().replaceAll('.', '').replaceAll('-', '').replaceAll(' ', '');
 	}
@@ -80,20 +96,29 @@
 		</ul>
 	</nav>
 
-	<input type="search" placeholder="Search kanji, meaning, reading..." bind:value={search} />
+	<input
+		type="search"
+		placeholder="Search kanji, meaning, reading..."
+		bind:value={search}
+		use:blurOnEnter
+	/>
 	<small id="search-helper">{filtered.length} results</small>
 	{#if studyMode}
 		<article class="grid">
 			<fieldset>
 				<legend><strong>First kanji</strong></legend>
 				<fieldset role="group">
-					<input type="number" bind:value={studyStartIndex} />
-					<input type="submit" value="+{studyItemsSize}" onclick={() => studyStartIndex += studyItemsSize} />
+					<input type="number" bind:value={studyStartIndex} use:blurOnEnter />
+					<input
+						type="submit"
+						value="+{studyItemsSize}"
+						onclick={() => (studyStartIndex += studyItemsSize)}
+					/>
 				</fieldset>
 			</fieldset>
 			<fieldset>
 				<legend><strong>Kanji amount</strong></legend>
-				<input type="number" bind:value={studyItemsSize} />
+				<input type="number" bind:value={studyItemsSize} use:blurOnEnter />
 			</fieldset>
 			<fieldset class="switch-set">
 				<label for="studyFront">
