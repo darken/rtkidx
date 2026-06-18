@@ -86,7 +86,10 @@
 		<article class="grid">
 			<fieldset>
 				<legend><strong>First kanji</strong></legend>
-				<input type="number" bind:value={studyStartIndex} />
+				<fieldset role="group">
+					<input type="number" bind:value={studyStartIndex} />
+					<input type="submit" value="+{studyItemsSize}" onclick={() => studyStartIndex += studyItemsSize} />
+				</fieldset>
 			</fieldset>
 			<fieldset>
 				<legend><strong>Kanji amount</strong></legend>
