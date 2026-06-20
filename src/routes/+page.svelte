@@ -62,21 +62,28 @@
 			// Split "母親" -> ["母", "親"]
 			const terms = [...q].filter(isKanji);
 
-			return entries.filter(([char, item]) => {
-				const haystack = normalize(
-					[char, item.keyword, item.components, item.on_reading, item.kun_reading, item.id].join(
-						' '
-					)
-				);
+			return entries
+				.filter(([char, item]) => {
+					const haystack = normalize(
+						[char, item.keyword, item.components, item.on_reading, item.kun_reading, item.id].join(
+							' '
+						)
+					);
 
-				// If searching kanji, match ANY kanji
-				if (terms.length > 0) {
-					return terms.some((term) => haystack.includes(term));
-				}
+					// If searching kanji, match ANY kanji
+					if (terms.length > 0) {
+						return terms.some((term) => haystack.includes(term));
+					}
 
-				// Normal text search
-				return haystack.includes(q);
-			});
+					// Normal text search
+					return haystack.includes(q);
+				})
+				.sort(([charA], [charB]) => {
+					const indexA = terms.indexOf(charA);
+					const indexB = terms.indexOf(charB);
+
+					return indexA - indexB;
+				});
 		})()
 	);
 </script>
@@ -141,6 +148,9 @@
 						bind:checked={kanjiShowAll}
 					/>
 				</label>
+			</fieldset>
+			<fieldset>
+				<input type="submit" value="Delete selected" onclick={() => console.log('REMOVE')} />
 			</fieldset>
 		</article>
 	{/if}
