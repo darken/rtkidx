@@ -5,4 +5,5 @@ export type KanjiEntry = {
   on_reading: string;
   kun_reading: string;
   kanji: string;
+  words: string[][];
 };

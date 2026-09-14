@@ -38,6 +38,13 @@
 	{#if visibleField !== 0 || showAll}
 		<div class="components">{entry.components}</div>
 	{/if}
+	{#if visibleField !== 0 || showAll}
+		<div class="components">
+			{#each entry.words as [word, reading], i}
+				{#if i > 0}・{/if}<span title="{reading}">{word}</span>
+			{/each}
+		</div>
+	{/if}
 </article>
 
 <style>
