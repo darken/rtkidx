@@ -39,9 +39,9 @@
 		<div class="components">{entry.components}</div>
 	{/if}
 	{#if visibleField !== 0 || showAll}
-		<div class="components">
-			{#each entry.words as [word, reading], i}
-				{#if i > 0}・{/if}<span title="{reading}">{word}</span>
+		<div class="words">
+			{#each entry.words as [word, reading]}
+				<span class="word" title="{reading}">{word}</span>
 			{/each}
 		</div>
 	{/if}
@@ -91,8 +91,20 @@
 	}
 	.result .components {
 		font-size: 14px;
-		color: darkgrey;
+		color: #727272;
 		margin-top: 2px;
+	}
+	.result .words {
+		margin-top: 2px;
+	}
+	.result .words .word {
+		display: inline-block;
+		font-size: 16px;
+		color: #333d53;
+		background: #f9fafb;
+		padding: 0.05rem 0.25rem;
+		margin: 0 0.35rem 0.2rem 0;
+		border-radius: 8px;
 	}
 	.result .row input[type='checkbox'] {
 		margin-left: auto;
