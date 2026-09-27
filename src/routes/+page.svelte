@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { kanji } from '$lib/data/kanji';
 	import KanjiCard from '$lib/components/KanjiCard.svelte';
 
 	let studyMode = $state(false);
-	let search = $derived(page.url.searchParams.get('q') ?? '');
+	let search = $state('');
 	let studyStartIndex = $state(1);
 	let studyItemsSize = $state(20);
 
@@ -37,6 +38,11 @@
 	function isKanji(char: string) {
 		return /[\u4e00-\u9faf]/.test(char);
 	}
+
+	onMount(() => {
+		// Runs strictly in the browser after static HTML has mounted
+		search = page.url.searchParams.get('q') ?? '';
+	});
 
 	$effect(() => {
 		if (studyMode) {
