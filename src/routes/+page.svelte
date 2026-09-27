@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { kanji } from '$lib/data/kanji';
 	import KanjiCard from '$lib/components/KanjiCard.svelte';
 
 	let studyMode = $state(false);
-	let search = $state('');
+	let search = $derived(page.url.searchParams.get('q') ?? '');
 	let studyStartIndex = $state(1);
 	let studyItemsSize = $state(20);
 
