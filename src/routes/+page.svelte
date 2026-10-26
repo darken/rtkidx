@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { kanji } from '$lib/data/kanji';
+	import { filterKanji } from '$lib/search';
 	import KanjiCard from '$lib/components/KanjiCard.svelte';
 
 	let studyMode = $state(false);
@@ -47,14 +48,6 @@
 		studyStartIndex = next > STUDY_MAX || next > entries.length ? 1 : next;
 	}
 
-	function normalize(text: string) {
-		return text.toLowerCase().replaceAll('.', '').replaceAll('-', '').replaceAll(' ', '');
-	}
-
-	function isKanji(char: string) {
-		return /[\u4e00-\u9faf]/.test(char);
-	}
-
 	onMount(() => {
 		// Runs strictly in the browser after static HTML has mounted
 		search = page.url.searchParams.get('q') ?? '';
@@ -75,41 +68,7 @@
 		}
 	});
 
-	let filtered = $derived(
-		(() => {
-			const q = normalize(search);
-
-			if (!q) {
-				return entries;
-			}
-
-			// Split "母親" -> ["母", "親"]
-			const terms = [...q].filter(isKanji);
-
-			return entries
-				.filter(([char, item]) => {
-					const haystack = normalize(
-						[char, item.keyword, item.components, item.on_reading, item.kun_reading, item.id].join(
-							' '
-						)
-					);
-
-					// If searching kanji, match ANY kanji
-					if (terms.length > 0) {
-						return terms.some((term) => haystack.includes(term));
-					}
-
-					// Normal text search
-					return haystack.includes(q);
-				})
-				.sort(([charA], [charB]) => {
-					const indexA = terms.indexOf(charA);
-					const indexB = terms.indexOf(charB);
-
-					return indexA - indexB;
-				});
-		})()
-	);
+	let filtered = $derived(filterKanji(entries, search));
 </script>
 
 <main class="container">
