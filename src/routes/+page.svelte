@@ -2,6 +2,7 @@
 	import { onMount, untrack } from 'svelte';
 	import { SvelteSet } from 'svelte/reactivity';
 	import { replaceState } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { kanji } from '$lib/data/kanji';
 	import { filterKanji } from '$lib/search';
@@ -67,13 +68,9 @@
 
 		const value = search;
 		const timer = setTimeout(() => {
-			const url = new URL(page.url);
-			if (value) {
-				url.searchParams.set('q', value);
-			} else {
-				url.searchParams.delete('q');
-			}
-			replaceState(url, page.state);
+			const query = value ? `?${new URLSearchParams({ q: value })}` : '';
+			// eslint-disable-next-line svelte/no-navigation-without-resolve -- same page, only the query changes
+			replaceState(resolve('/') + query, page.state);
 		}, 300);
 
 		return () => clearTimeout(timer);
