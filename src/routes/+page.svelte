@@ -6,8 +6,11 @@
 
 	let studyMode = $state(false);
 	let search = $state('');
-	let studyStartIndex = $state(1);
-	let studyItemsSize = $state(20);
+	let studyStartIndex = $state<number | null>(1);
+	let studyItemsSize = $state<number | null>(20);
+
+	const STUDY_MIN = 1;
+	const STUDY_MAX = 3000;
 
 	let kanjiHidden = $state(false);
 	let kanjiVisibleField = $state(-1);
@@ -31,6 +34,19 @@
 		};
 	}
 
+	function clamp(value: number | null, fallback: number) {
+		if (value === null || !Number.isFinite(value)) {
+			return fallback;
+		}
+
+		return Math.min(STUDY_MAX, Math.max(STUDY_MIN, Math.trunc(value)));
+	}
+
+	function nextBatch() {
+		const next = clamp(studyStartIndex, 1) + clamp(studyItemsSize, 20);
+		studyStartIndex = next > STUDY_MAX || next > entries.length ? 1 : next;
+	}
+
 	function normalize(text: string) {
 		return text.toLowerCase().replaceAll('.', '').replaceAll('-', '').replaceAll(' ', '');
 	}
@@ -47,8 +63,9 @@
 	$effect(() => {
 		if (studyMode) {
 			// Study mode
-			let start = studyStartIndex - 1;
-			search = entries.slice(start, start + studyItemsSize).reduce((acc, v) => acc + v[0], '');
+			const start = clamp(studyStartIndex, 1) - 1;
+			const size = clamp(studyItemsSize, 20);
+			search = entries.slice(start, start + size).reduce((acc, v) => acc + v[0], '');
 
 			kanjiVisibleField = kanjiHidden ? 1 : 0;
 			kanjiShowAll = false;
@@ -122,17 +139,25 @@
 			<fieldset>
 				<legend><strong>First kanji</strong></legend>
 				<fieldset role="group">
-					<input type="number" bind:value={studyStartIndex} use:blurOnEnter />
 					<input
-						type="submit"
-						value="+{studyItemsSize}"
-						onclick={() => (studyStartIndex += studyItemsSize)}
+						type="number"
+						min={STUDY_MIN}
+						max={STUDY_MAX}
+						bind:value={studyStartIndex}
+						use:blurOnEnter
 					/>
+					<button type="button" onclick={nextBatch}>+{clamp(studyItemsSize, 20)}</button>
 				</fieldset>
 			</fieldset>
 			<fieldset>
 				<legend><strong>Kanji amount</strong></legend>
-				<input type="number" bind:value={studyItemsSize} use:blurOnEnter />
+				<input
+					type="number"
+					min={STUDY_MIN}
+					max={STUDY_MAX}
+					bind:value={studyItemsSize}
+					use:blurOnEnter
+				/>
 			</fieldset>
 			<fieldset class="switch-set">
 				<label for="studyFront">
