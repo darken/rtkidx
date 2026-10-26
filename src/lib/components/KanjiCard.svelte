@@ -97,7 +97,7 @@
 	}
 	.result .components {
 		font-size: 14px;
-		color: #727272;
+		color: var(--pico-muted-color);
 		margin-top: 2px;
 	}
 	.result .words {
@@ -106,8 +106,8 @@
 	.result .words .word {
 		display: inline-block;
 		font-size: 16px;
-		color: #333d53;
-		background: #f9fafb;
+		color: var(--pico-color);
+		background: var(--pico-card-sectioning-background-color);
 		padding: 0.05rem 0.25rem;
 		margin: 0 0.35rem 0.2rem 0;
 		border-radius: 8px;
