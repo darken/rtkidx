@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
+	import { SvelteSet } from 'svelte/reactivity';
 	import { replaceState } from '$app/navigation';
 	import { page } from '$app/state';
 	import { kanji } from '$lib/data/kanji';
@@ -17,6 +18,7 @@
 	let kanjiHidden = $state(false);
 	let kanjiVisibleField = $state(-1);
 	let kanjiShowAll = $state(false);
+	const selected = new SvelteSet<string>();
 
 	const entries = Object.entries(kanji);
 
@@ -77,7 +79,24 @@
 		return () => clearTimeout(timer);
 	});
 
+	function deleteSelected() {
+		search = [...search].filter((c) => !selected.has(c)).join('');
+		selected.clear();
+	}
+
+	function toggleSelected(char: string) {
+		if (selected.has(char)) {
+			selected.delete(char);
+		} else {
+			selected.add(char);
+		}
+	}
+
 	$effect(() => {
+		// The batch is rebuilt when any of these change
+		void [studyStartIndex, studyItemsSize, kanjiHidden, studyMode];
+		untrack(() => selected.clear());
+
 		if (studyMode) {
 			// Study mode
 			const start = clamp(studyStartIndex, 1) - 1;
@@ -165,14 +184,23 @@
 				</label>
 			</fieldset>
 			<fieldset>
-				<input type="submit" value="Delete selected" onclick={() => console.log('REMOVE')} />
+				<button type="button" disabled={selected.size === 0} onclick={deleteSelected}>
+					Delete{selected.size ? ` ${selected.size}` : ''} selected
+				</button>
 			</fieldset>
 		</article>
 	{/if}
 
 	<section class="kanjiOutput">
 		{#each filtered as [char, entry]}
-			<KanjiCard character={char} {entry} visibleField={kanjiVisibleField} showAll={kanjiShowAll} />
+			<KanjiCard
+				character={char}
+				{entry}
+				visibleField={kanjiVisibleField}
+				showAll={kanjiShowAll}
+				checked={selected.has(char)}
+				onToggle={() => toggleSelected(char)}
+			/>
 		{/each}
 	</section>
 </main>
