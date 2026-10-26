@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { replaceState } from '$app/navigation';
 	import { page } from '$app/state';
 	import { kanji } from '$lib/data/kanji';
 	import { filterKanji } from '$lib/search';
@@ -48,9 +49,32 @@
 		studyStartIndex = next > STUDY_MAX || next > entries.length ? 1 : next;
 	}
 
+	let mounted = $state(false);
+
 	onMount(() => {
 		// Runs strictly in the browser after static HTML has mounted
 		search = page.url.searchParams.get('q') ?? '';
+		mounted = true;
+	});
+
+	// Keep `q` in the URL in sync with the search, once the initial `q` has been read
+	$effect(() => {
+		if (!mounted) {
+			return;
+		}
+
+		const value = search;
+		const timer = setTimeout(() => {
+			const url = new URL(page.url);
+			if (value) {
+				url.searchParams.set('q', value);
+			} else {
+				url.searchParams.delete('q');
+			}
+			replaceState(url, page.state);
+		}, 300);
+
+		return () => clearTimeout(timer);
 	});
 
 	$effect(() => {
